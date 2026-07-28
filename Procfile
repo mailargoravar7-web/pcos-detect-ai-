@@ -1,0 +1,1 @@
+web: gunicorn pcos_ai.wsgi
