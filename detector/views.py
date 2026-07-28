@@ -1,3 +1,14 @@
+from django.shortcuts import render
+from django.core.files.storage import FileSystemStorage
+
+from .forms import UploadImageForm
+from .predict import predict_pcos
+
+
+def home(request):
+    return render(request, "home.html")
+
+
 def upload(request):
 
     result = None
