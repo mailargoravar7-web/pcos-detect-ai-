@@ -33,10 +33,23 @@ def upload(request):
 
             image_url = fs.url(filename)
 
-            result, confidence = predict_pcos(image_path)
-            print("Result:", result)
-            print("Confidence:", confidence)
-            
+            try:
+                result, confidence = predict_pcos(image_path)
+                print("Result:", result)
+                print("Confidence:", confidence)
+
+            except Exception as e:
+                import traceback
+                traceback.print_exc()
+
+                return render(
+                    request,
+                    "upload.html",
+                    {
+                        "form": form,
+                        "error": str(e),
+                    },
+                )
 
     else:
 
