@@ -1,16 +1,3 @@
-import os
-
-from django.shortcuts import render
-from django.core.files.storage import FileSystemStorage
-
-from .forms import UploadImageForm
-from .predict import predict_pcos
-
-
-def home(request):
-    return render(request, "home.html")
-
-
 def upload(request):
 
     result = None
@@ -23,22 +10,28 @@ def upload(request):
 
         if form.is_valid():
 
-            image = form.cleaned_data["image"]
-
-            fs = FileSystemStorage()
-
-            filename = fs.save(image.name, image)
-
-            image_path = fs.path(filename)
-
-            image_url = fs.url(filename)
-
             try:
+                print("=" * 50)
+                print("Upload request received")
+
+                image = form.cleaned_data["image"]
+
+                fs = FileSystemStorage()
+
+                filename = fs.save(image.name, image)
+
+                image_path = fs.path(filename)
+
+                image_url = fs.url(filename)
+
+                print("Saved Image:", image_path)
+
                 result, confidence = predict_pcos(image_path)
-                print("Result:", result)
-                print("Confidence:", confidence)
+
+                print("Prediction Success")
 
             except Exception as e:
+
                 import traceback
                 traceback.print_exc()
 
