@@ -22,6 +22,7 @@ def upload(request):
         if form.is_valid():
 
             try:
+
                 print("=" * 50)
                 print("Upload request received")
 

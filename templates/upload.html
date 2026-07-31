@@ -20,6 +20,28 @@
 
             <div class="card-body p-5">
 
+                {% if error %}
+
+                <div class="alert alert-danger">
+
+                    <h4>❌ Invalid Image</h4>
+
+                    <p class="mb-2">
+                        {{ error }}
+                    </p>
+
+                    <hr>
+
+                    <p class="mb-0">
+                        Please upload a clear <strong>ovarian ultrasound image</strong>.
+                        Images such as photographs, CT scans, MRI scans,
+                        X-rays, or unrelated images are not supported.
+                    </p>
+
+                </div>
+
+                {% endif %}
+
                 <form method="POST" enctype="multipart/form-data">
 
                     {% csrf_token %}
@@ -27,7 +49,9 @@
                     <div class="mb-4">
 
                         <label class="form-label fw-bold">
+
                             Select Ultrasound Image
+
                         </label>
 
                         <input
@@ -78,13 +102,13 @@
 
                 <hr class="my-5">
 
-                <div class="card border-success shadow">
+                <div class="card shadow border-success">
 
                     <div class="card-header bg-success text-white">
 
                         <h3 class="mb-0">
 
-                            Prediction Result
+                            AI Prediction Result
 
                         </h3>
 
@@ -92,19 +116,23 @@
 
                     <div class="card-body">
 
-                        <h2 class="text-center">
+                        <div class="text-center">
 
                             {% if result == "PCOS" %}
 
-                                🔴 {{ result }}
+                                <h1 class="text-danger">
+                                    🔴 PCOS Detected
+                                </h1>
 
                             {% else %}
 
-                                🟢 {{ result }}
+                                <h1 class="text-success">
+                                    🟢 Non-PCOS
+                                </h1>
 
                             {% endif %}
 
-                        </h2>
+                        </div>
 
                         <hr>
 
@@ -115,7 +143,7 @@
 
                         </h4>
 
-                        <div class="progress mt-3" style="height:25px;">
+                        <div class="progress mt-3" style="height:30px;">
 
                             <div
                                 class="progress-bar progress-bar-striped progress-bar-animated
@@ -124,6 +152,7 @@
                                 {% else %}
                                     bg-success
                                 {% endif %}"
+
                                 style="width: {{ confidence }}%;">
 
                                 {{ confidence }}%
@@ -136,28 +165,33 @@
 
                         {% if result == "PCOS" %}
 
-                        <div class="alert alert-danger mt-4">
+                        <div class="alert alert-danger">
 
                             <h5>⚠ Recommendation</h5>
 
-                            The uploaded ultrasound image indicates signs of
-                            <strong>PCOS</strong>.
+                            The uploaded ultrasound image shows features
+                            consistent with <strong>PCOS</strong>.
 
-                            Please consult a qualified gynecologist for further
-                            diagnosis and medical advice.
+                            <br><br>
+
+                            Please consult a qualified gynecologist
+                            for further clinical evaluation and diagnosis.
 
                         </div>
 
                         {% else %}
 
-                        <div class="alert alert-success mt-4">
+                        <div class="alert alert-success">
 
                             <h5>✔ Recommendation</h5>
 
-                            No significant indication of PCOS was detected
-                            from this ultrasound image.
+                            No significant signs of PCOS were detected
+                            in the uploaded ultrasound image.
 
-                            Regular health checkups are still recommended.
+                            <br><br>
+
+                            Continue regular health check-ups and consult
+                            your doctor if symptoms persist.
 
                         </div>
 
