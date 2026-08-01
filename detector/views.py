@@ -11,9 +11,12 @@ def home(request):
 
 def upload(request):
 
+    form = UploadImageForm()
+
     result = None
     confidence = None
     image_url = None
+    error = None
 
     if request.method == "POST":
 
@@ -21,14 +24,17 @@ def upload(request):
 
         if form.is_valid():
 
+            fs = FileSystemStorage()
+
+            filename = None
+
             try:
 
-                print("=" * 50)
-                print("Upload request received")
+                print("=" * 60)
+                print("Upload Request Received")
+                print("=" * 60)
 
                 image = form.cleaned_data["image"]
-
-                fs = FileSystemStorage()
 
                 filename = fs.save(image.name, image)
 
@@ -36,29 +42,31 @@ def upload(request):
 
                 image_url = fs.url(filename)
 
-                print("Saved Image:", image_path)
+                print("Saved Image :", image_path)
 
                 result, confidence = predict_pcos(image_path)
 
-                print("Prediction Success")
+                print("=" * 60)
+                print("Prediction Successful")
+                print("=" * 60)
 
             except Exception as e:
 
                 import traceback
                 traceback.print_exc()
 
-                return render(
-                    request,
-                    "upload.html",
-                    {
-                        "form": form,
-                        "error": str(e),
-                    },
-                )
+                error = str(e)
 
-    else:
+            finally:
 
-        form = UploadImageForm()
+                # Optional:
+                # Delete uploaded image after prediction.
+                # Comment these two lines if you want to keep uploads.
+
+                # if filename and fs.exists(filename):
+                #     fs.delete(filename)
+
+                pass
 
     return render(
         request,
@@ -68,5 +76,6 @@ def upload(request):
             "result": result,
             "confidence": confidence,
             "image_url": image_url,
+            "error": error,
         },
     )

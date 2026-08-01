@@ -2,213 +2,807 @@
 
 {% block content %}
 
-<div class="row justify-content-center">
+<style>
 
-    <div class="col-lg-8">
+.upload-card{
+    border:none;
+    border-radius:20px;
+    overflow:hidden;
+    animation:fadeUp .7s ease;
+}
 
-        <div class="card shadow-lg border-0">
+@keyframes fadeUp{
 
-            <div class="card-header bg-primary text-white text-center py-4">
+from{
 
-                <h2>🩺 PCOS Detection Using CNN</h2>
+opacity:0;
+transform:translateY(30px);
 
-                <p class="mb-0">
-                    Upload an Ovarian Ultrasound Image for AI Analysis
-                </p>
+}
 
-            </div>
+to{
 
-            <div class="card-body p-5">
+opacity:1;
+transform:translateY(0);
 
-                {% if error %}
+}
 
-                <div class="alert alert-danger">
+}
 
-                    <h4>❌ Invalid Image</h4>
+.card-header{
 
-                    <p class="mb-2">
-                        {{ error }}
-                    </p>
+background:linear-gradient(90deg,#0d6efd,#3b82f6);
 
-                    <hr>
+}
 
-                    <p class="mb-0">
-                        Please upload a clear <strong>ovarian ultrasound image</strong>.
-                        Images such as photographs, CT scans, MRI scans,
-                        X-rays, or unrelated images are not supported.
-                    </p>
+.form-control{
 
-                </div>
+border-radius:12px;
 
-                {% endif %}
+padding:12px;
 
-                <form method="POST" enctype="multipart/form-data">
+}
 
-                    {% csrf_token %}
+.btn-primary{
 
-                    <div class="mb-4">
+border-radius:12px;
 
-                        <label class="form-label fw-bold">
+transition:.3s;
 
-                            Select Ultrasound Image
+}
 
-                        </label>
+.btn-primary:hover{
 
-                        <input
-                            type="file"
-                            name="image"
-                            class="form-control form-control-lg"
-                            accept="image/*"
-                            required>
+transform:translateY(-2px);
 
-                    </div>
+}
 
-                    <div class="text-center">
+.image-info{
 
-                        <button
-                            class="btn btn-primary btn-lg px-5"
-                            type="submit">
+display:none;
 
-                            🔍 Analyze Image
+background:#f8f9fa;
 
-                        </button>
+border-left:5px solid #0d6efd;
 
-                    </div>
+border-radius:12px;
 
-                </form>
+padding:18px;
 
-                {% if image_url %}
+margin-top:20px;
 
-                <hr class="my-5">
+}
 
-                <div class="text-center">
+.image-info p{
 
-                    <h4 class="mb-3">
+margin-bottom:8px;
 
-                        Uploaded Image
+}
 
-                    </h4>
+#loadingMessage{
 
-                    <img
-                        src="{{ image_url }}"
-                        class="img-fluid rounded shadow"
-                        style="max-height:350px;">
+display:none;
 
-                </div>
+font-weight:600;
 
-                {% endif %}
+color:#0d6efd;
 
-                {% if result %}
+margin-top:18px;
 
-                <hr class="my-5">
+}
 
-                <div class="card shadow border-success">
+.toast-container{
 
-                    <div class="card-header bg-success text-white">
+position:fixed;
 
-                        <h3 class="mb-0">
+top:20px;
 
-                            AI Prediction Result
+right:20px;
 
-                        </h3>
+z-index:9999;
 
-                    </div>
+}
 
-                    <div class="card-body">
+.result-card{
 
-                        <div class="text-center">
+animation:fadeUp .7s ease;
 
-                            {% if result == "PCOS" %}
+}
 
-                                <h1 class="text-danger">
-                                    🔴 PCOS Detected
-                                </h1>
+.progress{
 
-                            {% else %}
+height:28px;
 
-                                <h1 class="text-success">
-                                    🟢 Non-PCOS
-                                </h1>
+border-radius:30px;
 
-                            {% endif %}
+overflow:hidden;
 
-                        </div>
+}
 
-                        <hr>
+.progress-bar{
 
-                        <h4>
+transition:width 2s ease;
 
-                            Confidence :
-                            <strong>{{ confidence }}%</strong>
+}
 
-                        </h4>
+</style>
 
-                        <div class="progress mt-3" style="height:30px;">
 
-                            <div
-                                class="progress-bar progress-bar-striped progress-bar-animated
-                                {% if result == 'PCOS' %}
-                                    bg-danger
-                                {% else %}
-                                    bg-success
-                                {% endif %}"
+<div class="toast-container">
 
-                                style="width: {{ confidence }}%;">
+<div class="toast text-bg-success border-0"
 
-                                {{ confidence }}%
+id="successToast">
 
-                            </div>
+<div class="d-flex">
 
-                        </div>
+<div class="toast-body">
 
-                        <hr>
-
-                        {% if result == "PCOS" %}
-
-                        <div class="alert alert-danger">
-
-                            <h5>⚠ Recommendation</h5>
-
-                            The uploaded ultrasound image shows features
-                            consistent with <strong>PCOS</strong>.
-
-                            <br><br>
-
-                            Please consult a qualified gynecologist
-                            for further clinical evaluation and diagnosis.
-
-                        </div>
-
-                        {% else %}
-
-                        <div class="alert alert-success">
-
-                            <h5>✔ Recommendation</h5>
-
-                            No significant signs of PCOS were detected
-                            in the uploaded ultrasound image.
-
-                            <br><br>
-
-                            Continue regular health check-ups and consult
-                            your doctor if symptoms persist.
-
-                        </div>
-
-                        {% endif %}
-
-                    </div>
-
-                </div>
-
-                {% endif %}
-
-            </div>
-
-        </div>
-
-    </div>
+✅ Analysis completed successfully.
 
 </div>
+
+<button
+
+class="btn-close btn-close-white me-2 m-auto"
+
+data-bs-dismiss="toast">
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="row justify-content-center">
+
+<div class="col-lg-9">
+
+<div class="card shadow-lg upload-card">
+
+<div class="card-header text-white text-center py-4">
+
+<h2>
+
+🩺 PCOS Detect AI
+
+</h2>
+
+<p class="mb-0">
+
+Upload an ovarian ultrasound image for AI analysis
+
+</p>
+
+</div>
+
+<div class="card-body p-5">
+
+{% if error %}
+
+<div class="alert alert-danger">
+
+<h4>
+
+❌ Invalid Image
+
+</h4>
+
+<hr>
+
+{{ error }}
+
+</div>
+
+{% endif %}
+
+<form
+
+method="POST"
+
+enctype="multipart/form-data"
+
+id="uploadForm">
+
+{% csrf_token %}
+
+<div class="mb-4">
+
+<label class="form-label fw-bold">
+
+Select Ultrasound Image
+
+</label>
+
+<input
+
+type="file"
+
+name="image"
+
+id="imageInput"
+
+class="form-control form-control-lg"
+
+accept="image/*"
+
+required>
+
+<small class="text-muted">
+
+Supported formats: JPG, JPEG, PNG
+
+</small>
+
+</div>
+
+<div
+
+class="image-info"
+
+id="imageInfo">
+
+<h5>
+
+📄 Image Information
+
+</h5>
+
+<hr>
+
+<p>
+
+<strong>File Name :</strong>
+
+<span id="fileName"></span>
+
+</p>
+
+<p>
+
+<strong>File Size :</strong>
+
+<span id="fileSize"></span>
+
+</p>
+
+<p>
+
+<strong>Upload Time :</strong>
+
+<span id="uploadTime"></span>
+
+</p>
+
+</div>
+
+<div class="text-center mt-4">
+
+<button
+
+class="btn btn-primary btn-lg px-5"
+
+id="analyzeBtn"
+
+type="submit">
+
+🔍 Analyze Image
+
+</button>
+
+<div id="loadingMessage">
+
+</div>
+
+</div>
+
+</form>
+
+{% if image_url %}
+
+<hr class="my-5">
+
+<div class="text-center">
+
+    <h4 class="fw-bold mb-4">
+
+        Uploaded Ultrasound Image
+
+    </h4>
+
+    <img
+
+        src="{{ image_url }}"
+
+        class="img-fluid rounded shadow-lg border"
+
+        style="max-height:380px;border-radius:15px;">
+
+</div>
+
+{% endif %}
+
+
+{% if result %}
+
+<hr class="my-5">
+
+<div class="card shadow-lg border-0 result-card">
+
+<div class="card-header text-white py-3
+{% if result == 'PCOS' %}
+bg-danger
+{% else %}
+bg-success
+{% endif %}
+">
+
+<h3 class="mb-0">
+
+🤖 AI Analysis Report
+
+</h3>
+
+</div>
+
+<div class="card-body p-4">
+
+<div class="row align-items-center">
+
+<div class="col-md-8">
+
+{% if result == "PCOS" %}
+
+<h2 class="fw-bold text-danger">
+
+🔴 PCOS Detected
+
+</h2>
+
+<p class="text-muted">
+
+The uploaded ovarian ultrasound image shows
+features that are consistent with
+<strong>Polycystic Ovary Syndrome (PCOS).</strong>
+
+</p>
+
+{% else %}
+
+<h2 class="fw-bold text-success">
+
+🟢 Non-PCOS
+
+</h2>
+
+<p class="text-muted">
+
+No significant signs of PCOS were detected
+from the uploaded ovarian ultrasound image.
+
+</p>
+
+{% endif %}
+
+</div>
+
+<div class="col-md-4 text-center">
+
+<div class="border rounded-4 p-3 bg-light">
+
+<h1 class="
+{% if result == 'PCOS' %}
+text-danger
+{% else %}
+text-success
+{% endif %}
+fw-bold display-5">
+
+{{ confidence }}%
+
+</h1>
+
+<p class="mb-0 text-muted">
+
+Confidence Score
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<hr>
+
+<h5 class="fw-bold mb-3">
+
+Confidence Meter
+
+</h5>
+
+<div class="progress">
+
+<div
+
+id="confidenceBar"
+
+class="progress-bar progress-bar-striped progress-bar-animated
+
+{% if result == 'PCOS' %}
+
+bg-danger
+
+{% else %}
+
+bg-success
+
+{% endif %}"
+
+style="width:0%;"
+
+data-confidence="{{ confidence }}">
+
+{{ confidence }}%
+
+</div>
+
+</div>
+
+<hr class="my-4">
+
+<div class="card border-0 bg-light">
+
+<div class="card-body">
+
+<h4>
+
+🩺 Medical Recommendation
+
+</h4>
+
+<hr>
+
+{% if result == "PCOS" %}
+
+<div class="alert alert-danger">
+
+<h5>
+
+⚠ Further Clinical Evaluation Recommended
+
+</h5>
+
+<p>
+
+The AI model detected features that may indicate
+<strong>PCOS.</strong>
+
+</p>
+
+<ul>
+
+<li>Consult a qualified gynecologist.</li>
+
+<li>Further ultrasound examination may be required.</li>
+
+<li>Follow your doctor's medical advice.</li>
+
+</ul>
+
+</div>
+
+{% else %}
+
+<div class="alert alert-success">
+
+<h5>
+
+✔ Healthy Prediction
+
+</h5>
+
+<p>
+
+The AI model did not detect significant
+features associated with PCOS.
+
+</p>
+
+<ul>
+
+<li>Maintain a healthy lifestyle.</li>
+
+<li>Continue regular health checkups.</li>
+
+<li>Consult a doctor if symptoms persist.</li>
+
+</ul>
+
+</div>
+
+{% endif %}
+
+<div class="alert alert-warning mt-4">
+
+<h5>
+
+⚠ AI Disclaimer
+
+</h5>
+
+<hr>
+
+This prediction is generated using an Artificial Intelligence model
+and should only be used for educational and preliminary screening purposes.
+
+<strong>
+
+It should not replace professional medical diagnosis,
+clinical examination or expert consultation.
+
+</strong>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="text-center mt-4">
+
+<a
+
+href="{% url 'upload' %}"
+
+class="btn btn-outline-primary btn-lg px-5">
+
+🔄 Analyze Another Image
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+{% endif %}
+
+<script>
+
+// =============================
+// IMAGE INFORMATION
+// =============================
+
+const imageInput = document.getElementById("imageInput");
+const imageInfo = document.getElementById("imageInfo");
+const fileName = document.getElementById("fileName");
+const fileSize = document.getElementById("fileSize");
+const uploadTime = document.getElementById("uploadTime");
+
+if(imageInput){
+
+    imageInput.addEventListener("change",function(){
+
+        const file=this.files[0];
+
+        if(!file){
+
+            imageInfo.style.display="none";
+            return;
+
+        }
+
+        imageInfo.style.display="block";
+
+        fileName.innerHTML=file.name;
+
+        fileSize.innerHTML=(file.size/1024).toFixed(2)+" KB";
+
+        uploadTime.innerHTML=new Date().toLocaleString();
+
+    });
+
+}
+
+
+// =============================
+// BUTTON LOADING
+// =============================
+
+const uploadForm=document.getElementById("uploadForm");
+const analyzeBtn=document.getElementById("analyzeBtn");
+const loadingMessage=document.getElementById("loadingMessage");
+
+if(uploadForm){
+
+uploadForm.addEventListener("submit",function(){
+
+analyzeBtn.disabled=true;
+
+analyzeBtn.classList.remove("btn-primary");
+
+analyzeBtn.classList.add("btn-secondary");
+
+analyzeBtn.innerHTML=`
+<span class="spinner-border spinner-border-sm me-2"></span>
+AI is Analyzing...
+`;
+
+loadingMessage.style.display="block";
+
+const messages=[
+
+"Uploading ultrasound image...",
+
+"Preparing image...",
+
+"Applying CNN preprocessing...",
+
+"Running AI model...",
+
+"Generating prediction..."
+
+];
+
+let index=0;
+
+loadingMessage.innerHTML=messages[index];
+
+const timer=setInterval(()=>{
+
+index++;
+
+if(index<messages.length){
+
+loadingMessage.innerHTML=messages[index];
+
+}
+else{
+
+clearInterval(timer);
+
+}
+
+},1200);
+
+});
+
+}
+
+
+// =============================
+// SUCCESS TOAST
+// =============================
+
+window.addEventListener("load",function(){
+
+{% if result %}
+
+const toastElement=document.getElementById("successToast");
+
+if(toastElement){
+
+const toast=new bootstrap.Toast(toastElement,{
+
+delay:3000
+
+});
+
+toast.show();
+
+}
+
+{% endif %}
+
+});
+
+
+
+// =============================
+// ANIMATE CONFIDENCE BAR
+// =============================
+
+window.addEventListener("load",function(){
+
+const progress=document.getElementById("confidenceBar");
+
+if(progress){
+
+const value=progress.dataset.confidence;
+
+setTimeout(()=>{
+
+progress.style.width=value+"%";
+
+},400);
+
+}
+
+});
+
+
+
+
+// =============================
+// CARD ANIMATION
+// =============================
+
+document.querySelectorAll(".card").forEach((card,index)=>{
+
+card.style.opacity="0";
+
+card.style.transform="translateY(20px)";
+
+setTimeout(()=>{
+
+card.style.transition=".6s";
+
+card.style.opacity="1";
+
+card.style.transform="translateY(0px)";
+
+},index*150);
+
+});
+
+
+
+
+// =============================
+// BUTTON HOVER
+// =============================
+
+document.querySelectorAll(".btn").forEach(btn=>{
+
+btn.addEventListener("mouseenter",()=>{
+
+btn.style.transform="translateY(-2px)";
+
+});
+
+btn.addEventListener("mouseleave",()=>{
+
+btn.style.transform="translateY(0px)";
+
+});
+
+});
+
+
+
+
+// =============================
+// SMOOTH SCROLL
+// =============================
+
+document.querySelectorAll('a[href^="#"]').forEach(anchor=>{
+
+anchor.addEventListener("click",function(e){
+
+e.preventDefault();
+
+const target=document.querySelector(this.getAttribute("href"));
+
+if(target){
+
+target.scrollIntoView({
+
+behavior:"smooth"
+
+});
+
+}
+
+});
+
+});
+
+</script>
 
 {% endblock %}

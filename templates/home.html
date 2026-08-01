@@ -1,117 +1,557 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
 
-<div class="container">
+<style>
 
-    <div class="row justify-content-center">
+.hero{
+padding:80px 0;
+}
 
-        <div class="col-lg-10">
+.hero-title{
+font-size:3.5rem;
+font-weight:700;
+color:#0d6efd;
+}
 
-            <div class="card border-0 shadow-lg">
+.hero-sub{
+font-size:1.15rem;
+color:#6c757d;
+line-height:1.8;
+margin-top:20px;
+}
 
-                <div class="card-body text-center py-5">
+.hero img{
+max-width:100%;
+animation:float 4s ease-in-out infinite;
+}
 
-                    <!-- Logo -->
-                    <img src="https://cdn-icons-png.flaticon.com/512/2966/2966488.png"
-                         width="90"
-                         class="mb-3">
+@keyframes float{
 
-                    <!-- Title -->
-                    <h1 class="display-2 fw-bold text-primary">
-                        PCOS Detect AI
-                    </h1>
+0%{
+transform:translateY(0px);
+}
 
-                    <!-- Subtitle -->
-                    <p class="lead text-secondary mt-4">
+50%{
+transform:translateY(-10px);
+}
 
-                        AI-Based Detection of
-                        <strong>Polycystic Ovary Syndrome (PCOS)</strong>
-                        using Deep Learning (CNN) and Ultrasound Images.
+100%{
+transform:translateY(0px);
+}
 
-                    </p>
+}
 
-                    <hr class="my-4">
+.section-title{
 
-                    <!-- Features -->
-                    <div class="row mt-5">
+font-weight:700;
+color:#0d6efd;
+margin-bottom:45px;
 
-                        <div class="col-md-3">
+}
 
-                            <h1>🧠</h1>
+.feature-card{
 
-                            <h5 class="fw-bold">
-                                CNN Model
-                            </h5>
+border:none;
+border-radius:18px;
+background:white;
+transition:.35s ease;
+cursor:pointer;
+overflow:hidden;
 
-                            <p class="text-muted">
-                                Deep Learning Based Detection
-                            </p>
+}
 
-                        </div>
+.feature-card:hover,
+.info-card:hover{
 
-                        <div class="col-md-3">
+    transform:translateY(-8px) scale(1.03);
+    box-shadow:0 15px 35px rgba(13,110,253,.18);
 
-                            <h1>🩺</h1>
+}
+}
 
-                            <h5 class="fw-bold">
-                                Ultrasound
-                            </h5>
+.feature-card img{
 
-                            <p class="text-muted">
-                                Analyze Ovarian Images
-                            </p>
+transition:.35s;
 
-                        </div>
+}
 
-                        <div class="col-md-3">
+.feature-card:hover img{
 
-                            <h1>⚡</h1>
+transform:scale(1.08);
 
-                            <h5 class="fw-bold">
-                                Fast Prediction
-                            </h5>
+}
 
-                            <p class="text-muted">
-                                AI gives instant results
-                            </p>
+.info-card{
 
-                        </div>
+border:none;
+border-radius:18px;
 
-                        <div class="col-md-3">
+}
 
-                            <h1>📊</h1>
+.fade-card{
 
-                            <h5 class="fw-bold">
-                                Confidence
-                            </h5>
+opacity:0;
+transform:translateY(35px);
+transition:all .8s ease;
 
-                            <p class="text-muted">
-                                Accurate Confidence Score
-                            </p>
+}
 
-                        </div>
+.fade-card.show{
 
-                    </div>
+opacity:1;
+transform:translateY(0);
 
-                    <hr class="my-5">
+}
 
-                    <!-- Button -->
-                    <a href="{% url 'upload' %}"
-                       class="btn btn-primary btn-lg px-5 py-3 fw-bold">
+</style>
 
-                        🚀 Start Detection
+<!-- ================= HERO ================= -->
 
-                    </a>
+<section class="hero">
 
-                </div>
+<div class="row align-items-center">
 
-            </div>
+<div class="col-lg-6">
 
-        </div>
+<span class="badge bg-primary px-3 py-2 mb-4">
 
-    </div>
+AI Powered Healthcare
+
+</span>
+
+<h1 class="hero-title">
+
+PCOS Detect AI
+
+</h1>
+
+<p class="hero-sub">
+
+AI-powered ovarian ultrasound analysis using
+Convolutional Neural Networks (CNN)
+for early screening of
+Polycystic Ovary Syndrome.
+
+<br><br>
+
+Fast • Accurate • Reliable
+
+</p>
+
+<a href="{% url 'upload' %}"
+
+class="btn btn-primary btn-lg px-5">
+
+Start AI Detection
+
+</a>
 
 </div>
+
+<div class="col-lg-6 text-center">
+
+<img
+
+src="{% static 'images/hero.png' %}"
+
+class="img-fluid"
+
+alt="Hero">
+
+</div>
+
+</div>
+
+</section>
+
+<hr class="my-5">
+
+<!-- ================= HOW IT WORKS ================= -->
+
+<section>
+
+<h2 class="text-center section-title">
+
+How It Works
+
+</h2>
+
+<div class="row g-4">
+
+<div class="col-md-4">
+
+<div class="card shadow feature-card fade-card text-center p-4 h-100">
+
+<img
+
+src="{% static 'images/upload.png' %}"
+
+style="height:90px"
+
+class="mx-auto mb-3">
+
+<h4>
+
+Upload Image
+
+</h4>
+
+<p class="text-muted">
+
+Upload an ovarian ultrasound image.
+
+</p>
+
+</div>
+
+</div>
+
+<div class="col-md-4">
+
+<div class="card shadow feature-card fade-card text-center p-4 h-100">
+
+<img
+
+src="{% static 'images/cnn.png' %}"
+
+style="height:90px"
+
+class="mx-auto mb-3">
+
+<h4>
+
+CNN Processing
+
+</h4>
+
+<p class="text-muted">
+
+CNN preprocesses and extracts image features.
+
+</p>
+
+</div>
+
+</div>
+
+<div class="col-md-4">
+
+<div class="card shadow feature-card fade-card text-center p-4 h-100">
+
+<img
+
+src="{% static 'images/prediction.png' %}"
+
+style="height:90px"
+
+class="mx-auto mb-3">
+
+<h4>
+
+Prediction
+
+</h4>
+
+<p class="text-muted">
+
+AI predicts PCOS or Non-PCOS.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<hr class="my-5">
+
+<!-- ================= WHY CHOOSE ================= -->
+
+<section>
+
+<h2 class="text-center section-title">
+
+Why Choose PCOS Detect AI
+
+</h2>
+
+<div class="row g-4">
+
+<div class="col-lg-3 col-md-6">
+
+<div class="card shadow feature-card fade-card text-center p-4 h-100">
+
+<i class="bi bi-lightning-charge-fill display-4 text-primary mb-3"></i>
+
+<h5>
+
+Fast Analysis
+
+</h5>
+
+<p class="text-muted">
+
+Get AI-assisted prediction within a few seconds.
+
+</p>
+
+</div>
+
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+<div class="card shadow feature-card fade-card text-center p-4 h-100">
+
+<i class="bi bi-cpu-fill display-4 text-primary mb-3"></i>
+
+<h5>
+
+CNN Powered
+
+</h5>
+
+<p class="text-muted">
+
+Built using a Convolutional Neural Network trained on ultrasound images.
+
+</p>
+
+</div>
+
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+<div class="card shadow feature-card fade-card text-center p-4 h-100">
+
+<i class="bi bi-phone-fill display-4 text-primary mb-3"></i>
+
+<h5>
+
+Responsive
+
+</h5>
+
+<p class="text-muted">
+
+Works smoothly on desktop, tablet and mobile devices.
+
+</p>
+
+</div>
+
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+<div class="card shadow feature-card fade-card text-center p-4 h-100">
+
+<i class="bi bi-shield-check display-4 text-primary mb-3"></i>
+
+<h5>
+
+Secure
+
+</h5>
+
+<p class="text-muted">
+
+Your uploaded ultrasound image is processed securely.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<hr class="my-5">
+
+<!-- ================= ABOUT AI ================= -->
+
+<section id="about">
+
+<h2 class="text-center section-title">
+
+About the AI Model
+
+</h2>
+
+<div class="row g-4">
+
+<div class="col-lg-3 col-md-6">
+
+<div class="card shadow info-card fade-card text-center p-4 h-100">
+
+<i class="bi bi-cpu-fill display-4 text-primary mb-3"></i>
+
+<h5>
+
+CNN Architecture
+
+</h5>
+
+<p class="text-muted">
+
+Convolutional Neural Network (CNN)
+
+</p>
+
+</div>
+
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+<div class="card shadow info-card fade-card text-center p-4 h-100">
+
+<i class="bi bi-image-fill display-4 text-primary mb-3"></i>
+
+<h5>
+
+Input Size
+
+</h5>
+
+<p class="text-muted">
+
+224 × 224 Pixels
+
+</p>
+
+</div>
+
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+<div class="card shadow info-card fade-card text-center p-4 h-100">
+
+<i class="bi bi-gear-fill display-4 text-primary mb-3"></i>
+
+<h5>
+
+Framework
+
+</h5>
+
+<p class="text-muted">
+
+TensorFlow • Keras • OpenCV
+
+</p>
+
+</div>
+
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+<div class="card shadow info-card fade-card text-center p-4 h-100">
+
+<i class="bi bi-code-square display-4 text-primary mb-3"></i>
+
+<h5>
+
+Backend
+
+</h5>
+
+<p class="text-muted">
+
+Python • Django
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<hr class="my-5">
+
+<!-- ================= READY TO START ================= -->
+
+<section class="py-5">
+
+<div class="card shadow-lg border-0 bg-primary text-white">
+
+<div class="card-body text-center py-5">
+
+<h2 class="fw-bold">
+
+Ready to Analyze an Ultrasound Image?
+
+</h2>
+
+<p class="lead mt-3">
+
+Upload an ovarian ultrasound image and let our
+AI assist in screening for
+Polycystic Ovary Syndrome (PCOS).
+
+</p>
+
+<a href="{% url 'upload' %}"
+
+class="btn btn-light btn-lg px-5 mt-3">
+
+<i class="bi bi-cloud-upload-fill"></i>
+
+Start AI Detection
+
+</a>
+
+</div>
+
+</div>
+
+</section>
+
+<hr class="my-5">
+
+<script>
+
+document.addEventListener("DOMContentLoaded",function(){
+
+const cards=document.querySelectorAll(".fade-card");
+
+const observer=new IntersectionObserver((entries)=>{
+
+entries.forEach(entry=>{
+
+if(entry.isIntersecting){
+
+entry.target.classList.add("show");
+
+}
+
+});
+
+},{
+threshold:.15
+});
+
+cards.forEach(card=>{
+
+observer.observe(card);
+
+});
+
+});
+
+</script>
 
 {% endblock %}

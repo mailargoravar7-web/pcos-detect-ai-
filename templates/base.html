@@ -1,64 +1,180 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>PCOS Detect AI</title>
 
+    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <style>
+
+        html{
+            scroll-behavior:smooth;
+        }
+
+        body{
+            font-family:'Poppins',sans-serif;
+            background:#f5f9ff;
+            min-height:100vh;
+            display:flex;
+            flex-direction:column;
+        }
+
+        .navbar{
+            background:linear-gradient(90deg,#0d6efd,#3b82f6);
+            padding:14px 0;
+        }
+
+        .navbar-brand{
+            font-size:1.45rem;
+            font-weight:700;
+        }
+
+        .nav-link{
+            color:#fff !important;
+            font-weight:500;
+            margin-left:20px;
+        }
+
+        .nav-link:hover{
+            color:#dbeafe !important;
+        }
+
+        .main-content{
+            flex:1;
+            padding:40px 0;
+        }
+
+        footer{
+            background:#fff;
+            border-top:1px solid #e5e7eb;
+            padding:30px 0;
+            margin-top:auto;
+        }
+
+        .footer-title{
+            color:#0d6efd;
+            font-size:1.15rem;
+            font-weight:600;
+        }
+
+        .footer-small{
+            color:#6c757d;
+            font-size:.9rem;
+        }
+
+    </style>
+
 </head>
 
-<body class="bg-light">
+<body>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow">
+<nav class="navbar navbar-expand-lg navbar-dark shadow sticky-top">
 
-    <div class="container">
+<div class="container">
 
-        <a class="navbar-brand fw-bold" href="{% url 'home' %}">
-            PCOS Detect AI
-        </a>
+<a class="navbar-brand" href="{% url 'home' %}">
+<i class="bi bi-heart-pulse-fill"></i>
+PCOS Detect AI
+</a>
 
-        <button class="navbar-toggler"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#navbarMenu">
+<button
+class="navbar-toggler"
+type="button"
+data-bs-toggle="collapse"
+data-bs-target="#navbarMenu">
 
-            <span class="navbar-toggler-icon"></span>
+<span class="navbar-toggler-icon"></span>
 
-        </button>
+</button>
 
-        <div class="collapse navbar-collapse" id="navbarMenu">
+<div class="collapse navbar-collapse" id="navbarMenu">
 
-            <ul class="navbar-nav ms-auto">
+<ul class="navbar-nav ms-auto">
 
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'home' %}">
-                        Home
-                    </a>
-                </li>
+<li class="nav-item">
 
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'upload' %}">
-                        Upload Image
-                    </a>
-                </li>
+<a class="nav-link" href="{% url 'home' %}">
+Home
+</a>
 
-            </ul>
+</li>
 
-        </div>
+<li class="nav-item">
 
-    </div>
+<a class="nav-link" href="{% url 'upload' %}">
+Upload Image
+</a>
+
+</li>
+
+</ul>
+
+</div>
+
+</div>
 
 </nav>
 
-<div class="container mt-5">
-    {% block content %}
-    {% endblock %}
+<div class="container main-content">
+
+{% block content %}
+{% endblock %}
+
 </div>
 
-<footer class="text-center mt-5 mb-3 text-muted">
-    © 2026 PCOS Detect AI | Final Year Major Project
+<footer>
+
+<div class="container text-center">
+
+<div class="footer-title">
+
+<i class="bi bi-heart-pulse-fill"></i>
+
+PCOS Detect AI
+
+</div>
+
+<div class="footer-small mt-2">
+
+Final Year Major Project
+
+</div>
+
+<div class="footer-small">
+
+Department of Electronics & Communication Engineering
+
+</div>
+
+<div class="footer-small">
+
+KLS VDIT, Haliyal
+
+</div>
+
+<div class="footer-small mt-2">
+
+Academic Year 2026
+
+</div>
+
+</div>
+
+</div>
+
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
